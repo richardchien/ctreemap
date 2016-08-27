@@ -13,7 +13,7 @@
 
 #include "ctreemap/ctmap.h"
 
-// 下面的宏调用会生成类型 StrMap （存储 char * 类型数据）以及相关函数
+// 下面的宏调用会生成类型 StrMap (存储 char * 类型数据) 以及相关函数
 GENERATE_MAP_TYPE(StrMap, char *)
 
 void release_value_callback(StrMap_Entry *e) {
@@ -26,7 +26,7 @@ void foreach_callback(const StrMap_Entry *e) {
 }
 
 int main() {
-    StrMap *map = new_StrMap(release_value_callback); // 如果存储的数据类型不需要释放内存，这里 release_value_callback 可以为 NULL
+    StrMap *map = new_StrMap(release_value_callback); // 如果存储的数据类型不需要释放内存, 这里 release_value_callback 可以为 NULL
     
     map->put(map, "key", strdup("hello"));
     map->put(map, "key", strdup("hello2"));
