@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](LICENSE)
 
-适用于 C/C++ 的 TreeMap，用 `search.h` 中的二叉搜索树相关函数实现，使用宏来实现「伪泛型」，生成不同类型的 TreeMap 和相关函数。
+适用于 C/C++ 的 TreeMap，用 `search.h` 中的二叉搜索树相关函数实现，使用宏来实现「伪泛型」，生成不同类型的 TreeMap 和相关函数（`TreeMap.h` 里默认生成了一个 `TreeMap` 类型，允许存储类型为 `void *` 的变量，也即任何指针类型）。
 
 ## 用法
 
@@ -11,7 +11,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "ctreemap/ctmap.h"
+#include "ctreemap/TreeMap.h"
 
 // 下面的宏调用会生成类型 StrMap (存储 char * 类型数据) 以及相关函数
 GENERATE_MAP_TYPE(StrMap, char *)
@@ -49,3 +49,5 @@ int main() {
     delete_StrMap(&map);
 }
 ```
+
+如果不需要生成存储固定类型的 Map，可以直接用默认的 `TreeMap` 类型，只不过在使用时需要对 `void *` 做类型转换。

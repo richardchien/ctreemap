@@ -2,8 +2,8 @@
 // Created by Richard Chien on 8/27/16.
 //
 
-#ifndef CTREEMAP_H
-#define CTREEMAP_H
+#ifndef CTREEMAP_TREEMAP_H
+#define CTREEMAP_TREEMAP_H
 
 #include <string.h>
 #include <stdlib.h>
@@ -49,56 +49,58 @@ struct _##type_name { \
     void (*foreach)(type_name *self, void (*foreach_callback)(const type_name##_Entry *entry)); \
 }; \
 \
-static void map_##type_name##_put(type_name *self, const char *key, value_type value) { \
+static void type_name##_put(type_name *self, const char *key, value_type value) { \
     type_name##_Entry *e = malloc(sizeof(type_name##_Entry)); \
     e->key = strdup(key); \
     e->value = value; \
-    __map_insert_entry(self, e); \
+    __TreeMap_insert_entry(self, e); \
 } \
 \
-static value_type map_##type_name##_get(const type_name *self, const char *key) { \
-    type_name##_Entry *e = __map_find_entry(self, key); \
+static value_type type_name##_get(const type_name *self, const char *key) { \
+    type_name##_Entry *e = __TreeMap_find_entry(self, key); \
     return e ? e->value : NULL; \
 } \
 \
-static void map_##type_name##_remove(type_name *self, const char *key) { \
-    __map_remove(self, key); \
+static void type_name##_remove(type_name *self, const char *key) { \
+    __TreeMap_remove(self, key); \
 } \
 \
-static void map_##type_name##_clear(type_name *self) { \
-    __map_clear(self); \
+static void type_name##_clear(type_name *self) { \
+    __TreeMap_clear(self); \
 } \
 \
-static void map_##type_name##_foreach(type_name *self, void (*foreach_callback)(const type_name##_Entry *entry)) { \
-    __map_traverse(self, foreach_callback); \
+static void type_name##_foreach(type_name *self, void (*foreach_callback)(const type_name##_Entry *entry)) { \
+    __TreeMap_traverse(self, foreach_callback); \
 } \
 \
 static type_name *new_##type_name(void (*release_value_callback)(type_name##_Entry *)) { \
     type_name *m = malloc(sizeof(type_name)); \
     m->__root = NULL; \
     m->__release_value_callback = release_value_callback; \
-    m->put = map_##type_name##_put; \
-    m->get = map_##type_name##_get; \
-    m->remove = map_##type_name##_remove; \
-    m->clear = map_##type_name##_clear; \
-    m->foreach = map_##type_name##_foreach; \
+    m->put = type_name##_put; \
+    m->get = type_name##_get; \
+    m->remove = type_name##_remove; \
+    m->clear = type_name##_clear; \
+    m->foreach = type_name##_foreach; \
     return m; \
 } \
 \
 static void delete_##type_name(type_name **self) { \
-    __map_destroy(self); \
+    __TreeMap_destroy(self); \
 }
 
-void __map_insert_entry(void *self, void *entry);
+void __TreeMap_insert_entry(void *self, void *entry);
 
-void *__map_find_entry(void *self, const char *key);
+void *__TreeMap_find_entry(void *self, const char *key);
 
-void __map_remove(void *self, const char *key);
+void __TreeMap_remove(void *self, const char *key);
 
-void __map_clear(void *self);
+void __TreeMap_clear(void *self);
 
-void __map_traverse(void *self, void (*_traverse_callback)(const void *entry));
+void __TreeMap_traverse(void *self, void (*_traverse_callback)(const void *entry));
 
-void __map_destroy(void **self);
+void __TreeMap_destroy(void **self);
 
-#endif //CTREEMAP_H
+GENERATE_MAP_TYPE(TreeMap, void *);
+
+#endif //CTREEMAP_TREEMAP_H
